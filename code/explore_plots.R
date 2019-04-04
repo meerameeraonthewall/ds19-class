@@ -12,6 +12,15 @@ biketown$hour <-
   hms(biketown$StartTime) %>%
   hour()
 
+biketown$month <- 
+  mdy(biketown$StartDate) %>%
+  month(label = T, abbr = T)
+  
+
+  
+  
+  
+  
 #same as this in base
 stime <-  hms(biketown$StartTime)
 biketown$hour <-  hour(stime)
@@ -28,3 +37,13 @@ am_peak <-  subset(biketown, hour>=7& hour<=10)
 hist(am_peak$hour, breaks = seq(7, 10, 1)) #not great bob!!
 barplot(table(am_peak$hour))
 
+#looking into seasonal patterns
+freq_by_month <- table(biketown$month)
+barplot(freq_by_month)
+
+#looking by station
+freq_by_station <-table(biketown$StartHub)
+
+#top 25 stations
+top_25_stations <- sort(freq_by_station, decreasing = T)[1:25]
+dotchart(top_25_stations)
