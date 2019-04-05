@@ -2,6 +2,9 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(readr)
+library(sp)
+library(sf)
+library(mapview)
 
 bikenet <- read_csv("data/bikenet-change.csv")
 head(bikenet)
@@ -35,9 +38,17 @@ fac_lengths <- bikenet_long %>%
   group_by(year, facility) %>% 
   summarise(metres = sum(length_m)) %>% 
   mutate(miles = metres / 1609)
-View(fac_lengths)
 
+p <-  ggplot(fac_lengths, aes(x=year, y=miles, group = facility, color = facility))
+p + geom_line()
+p + geom_point()
+p + geom_line() + scale_y_log10()
+p + geom_line() + labs(title = "Change in facilities Portland", 
+                       subtitle = "2008-2013", caption = "source: Portland metro") + 
+  xlab("year") + ylab("Total miles")
 
+p2 <-  ggplot(fac_lengths, aes(x=year, y=miles, group = facility))  
+p2 + geom_line(size=1, color = "blue") + facet_wrap( ~ facility) + scale_y_log10()
 
 
 
